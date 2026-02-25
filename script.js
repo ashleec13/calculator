@@ -46,3 +46,17 @@ setStatus('');
     
     updateScreen();
 }
+
+function pressOperator(op) {
+    if (typedNumberText === ''&& storedNumber === null) {
+        setStatus('Please enter a number first');
+        return;
+    }
+    if (storedNumber === null) {
+        storedNumber = Number(typedNumberText);
+        currentOperator = op;
+        historyPart = [String(storedNumber), currentOperator]
+        typedNumberText = '';
+        updateScreen();
+    }
+}
