@@ -14,42 +14,72 @@ let historyPart = [];
 
 // HELPER FUNCTIONS
 
-function setStatus(message){
+function setStatus(message) {
     document.getElementById('statusLine').textContent = message;
 }
 
-function showSymbol(op){
+function showSymbol(op) {
     if (op === '*') return '×';
     if (op === '/') return '÷';
     if (op === '+') return '+';
-    if (op === '-') return '&#x2212;';
+    if (op === '-') return '−';
     return op;
 }
 
-function updateScreen(){
+function updateScreen() {
     const display = document.getElementById('displayLine');
     const history = document.getElementById('historyLine');
     const status = document.getElementById('statusLine');
-    display.textContent = typedNumberText;
+
+    if (typedNumberText !== '') {
+        display.textContent = typedNumberText;
+    } else {
+        display.textContent = '0';
+    }
+
+
+    if (historyPart.length === 0) {
+        history.textContent = '';
+    }
+
+    if (historyPart.length === 1) {
+        history.textContent = historyPart[0];
+    }
+
+    if (historyPart.length === 2) {
+        history.textContent = historyPart[0] + ' ' + showSymbol(historyPart[1]);
+    }
+
+    if (historyPart.length === 3) {
+        history.textContent = historyPart[0] + ' ' + showSymbol(historyPart[1]) + ' ' + showSymbol(historyPart[2]);
+    }
+    
+    if(status.textContent === '') status.textContent = 'Ready';{
+
 }
 
 
 
 
 function pressNumber(digit) {
-setStatus(''); 
+    setStatus('');
     if (typedNumberText === '0') {
         typedNumberText = digit;
     } else {
         typedNumberText = typedNumberText + digit;
     }
-    
+
     updateScreen();
 }
 
 function pressOperator(op) {
-    if (typedNumberText === ''&& storedNumber === null) {
+    setStatus('');
+
+
+
+    if (typedNumberText === '' && storedNumber === null) {
         setStatus('Please enter a number first');
+        updateScreen();
         return;
     }
     if (storedNumber === null) {
@@ -59,4 +89,24 @@ function pressOperator(op) {
         typedNumberText = '';
         updateScreen();
     }
+
+    if (typedNumberText !== '') {
+        const secondNumber = Number(typedNumberText);
+
+    if (currentOperator === '/' && secondNumber === 0) {
+        setStatus('Error: Division by zero');
+        updateScreen();
+        return;
+    }
+}
+
+
+
+function clearAll() {
+    typedNumberText = '';
+    storedNumber = null;
+    currentOperator = '';
+    historyPart = [];
+    setStatus('Cleared');
+    updateScreen();
 }
